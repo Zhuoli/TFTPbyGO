@@ -4,44 +4,53 @@ import (
 	"common"
 	"net"
 	"log"
-//	"time"
 	"fmt"
 	"encoding/binary"
 	
 	"packets"
-//	"timeoutcontroller"
 	"fileSys"
 )
 
-func (a *RequestHandler)HandleWriteRequest(remoteAddress net.Addr, filename string) {
+func (a *RequestHandler)HandlePutRequest(remoteAddress net.Addr, filename string) {
 	log.Println("Handling WRQ")
 	com,err :=common.NewUDPConnection()	
 	if err!=nil{
+		log.Println(err)
 		return
 	}
 	defer com.Close()
-
 	f, err := fileSys.Create(filename,&a.fs)
 	if err != nil {
+		log.Println("Write Error")
 		log.Println(err)
 		// TODO: This error should indicate what went wrong
-		com.SendError(0, err.Error(), remoteAddress)
+		com.SendError(packets.FileAlreadyExists, err.Error(), remoteAddress)
 		return
 	}
-
+	defer cleanIfNotFlushed(filename,a.fs)
+	
 	bw := fileSys.NewWriter(f)
-	defer bw.Flush()
 
+	
 	err = WriteFileLoop(bw, com, remoteAddress)
 	if err != nil {
 		log.Println("Error receiving file:", err)
 		return
 	}
+	bw.Flush()
 	log.Println("Seccesfully received:", filename)
 }
 
-func WriteFileLoop(w *fileSys.Writer, com *common.Common, remoteAddress net.Addr) error {
-	
+func cleanIfNotFlushed(filename string, fs fileSys.FileSys){
+	f,ok:=fs.FileMap[filename]
+	if !ok{
+		return
+	}else if f==nil{
+		delete(fs.FileMap,filename)
+	}
+}
+
+func WriteFileLoop(w *fileSys.Writer, com *common.Common, remoteAddress net.Addr) error{
 	tid := uint16(0)
 
 	// Acknowledge WRQ

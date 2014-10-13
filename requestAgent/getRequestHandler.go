@@ -11,7 +11,7 @@ import (
 	"common"	
 )
 
-func (a *RequestHandler) HandleReadRequest(remoteAddress net.Addr, filename string) {
+func (a *RequestHandler) HandleGetRequest(remoteAddress net.Addr, filename string) {
 	start := time.Now()
 	log.Println("Handling RRQ for", filename)
 	com,err :=common.NewUDPConnection()
@@ -50,6 +50,8 @@ func ReadFileLoop(r *fileSys.Reader, com *common.Common, remoteAddr net.Addr, bl
 		n, err := r.Read(buffer)
 		if err == fileSys.EOF {
 			// We're done
+			packet := packets.CreateDataPacket(tid, make([]byte, 0))
+			n, err = com.WriteTo(packet, remoteAddr)
 			break
 		}
 		if err != nil {

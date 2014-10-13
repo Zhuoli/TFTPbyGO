@@ -19,4 +19,8 @@ func newFile(filename string)(*File,error){
 	return fil,nil
 }
 
+func (F *File) Size()int{
+	return len(F.buffer)
+}
+
 

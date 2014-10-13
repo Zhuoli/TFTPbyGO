@@ -48,6 +48,7 @@ func NewUDPConnection() (*Common,error){
 	}
 	return &Common{
 		conn : conn,
+		timeout	: timeoutcontroller.NewDuration(1),
 		},err
 }
 
