@@ -6,6 +6,8 @@ import (
 	"bufio"
 	"bytes"
 	
+	"chanmutex"
+	
 )
 
 type FileSys struct{
@@ -14,10 +16,16 @@ type FileSys struct{
 	FileMap map[string] File
 }
 
-func NewFileSys() *FileSys {
-	return &FileSys{
-		FileMap : initFileMap(),
+var fileSystemSingleton *FileSys=nil
+
+func GetFileSys() *FileSys {
+	if fileSystemSingleton==nil{
+		fileSystemSingleton = &FileSys{
+			FileMap : initFileMap(),
+		}
 	}
+		
+	return fileSystemSingleton
 }
 
 func (fs *FileSys) ReadFileByName(filename string) (*Reader,*File,error){
@@ -41,6 +49,7 @@ func initFileMap() map[string] File{
 	val:=[]byte("hello, this is server file")
 	val = append(val,byte(0))
 	fileMap["server.dat"]=File{
+		ChanLock : chanmutex.NewChanLock(),
 		filename	: "server.dat",
 		buffer		: val,
 	}
@@ -72,6 +81,7 @@ func read2File(filename string) File{
 	}
 	
 	return File{
+		ChanLock : chanmutex.NewChanLock(),
 		filename : filename,
 		buffer : buffer.Bytes(),
 	}

@@ -4,11 +4,7 @@ import (
 )
 
 func Create(filename string, fs *FileSys)(*File,error){
-	fil :=&File{
-		filename : filename,
-		buffer	 : make([]byte, 0),
-	}
-	return fil,nil
+	return NewFile(filename)
 }
 
 

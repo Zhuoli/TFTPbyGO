@@ -11,7 +11,7 @@ type RequestHandler struct {
 }
 func NewRequestHandler() *RequestHandler {
 	return &RequestHandler{
-		fs: *fileSys.NewFileSys(),
+		fs: *fileSys.GetFileSys(),
 	}
 }
 

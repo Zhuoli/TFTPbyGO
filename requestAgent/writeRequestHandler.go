@@ -31,7 +31,7 @@ func (a *RequestHandler)HandleWriteRequest(remoteAddress net.Addr, filename stri
 	defer fileSys.FileCleanup(f)
 
 	bw := fileSys.NewWriter(f)
-	defer bw.Flush(&a.fs)
+	defer bw.Flush()
 
 	err = WriteFileLoop(bw, com, remoteAddress)
 	if err != nil {

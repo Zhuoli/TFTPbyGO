@@ -2,6 +2,7 @@ package fileSys
 
 import (
 	"bytes"
+	"chanmutex"
 )
 type Writer struct{
 	buffer *bytes.Buffer
@@ -20,8 +21,10 @@ func(w *Writer)Write(chunk []byte)(int,error){
 	return n,err
 }
 
-func(w *Writer)Flush(fs *FileSys){
+func(w *Writer)Flush(){
+	fs :=GetFileSys()
 	fs.Register(w.filename,File{
+			ChanLock : chanmutex.NewChanLock(),
 			filename : w.filename,
 			buffer	 : w.buffer.Bytes(),
 			})
