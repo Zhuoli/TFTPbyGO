@@ -1,20 +1,35 @@
 package fileSys
 
 import (
+	"errors"
+	"fmt"
 )
 
 func Create(filename string, fs *FileSys)(*File,error){
-	return NewFile(filename)
+	fs.Lock()
+	_,ok:=fs.FileMap[filename]
+	defer fs.Unlock()
+	if ok{
+		return nil,errors.New("File already exists.")
+	}
+	fs.FileMap[filename]=nil
+	return newFile(filename)
 }
 
 
-func FileCleanup(f *File) {
-	// sync mutex
-//	if err := f.file.Sync(); err != nil {
-//		log.Printf("Error syncing %s, %v", f.file.Name(), err)
-//	}
-//	if err := f.file.Close(); err != nil {
-//		log.Printf("Error closing file %s, %v", f.file.Name(), err)
-//	}
+func (fs *FileSys)Open(filename string) (* File,error){
+	fil,ok :=fs.FileMap[filename]
+	if !ok || fil==nil{
+		err := fmt.Errorf("open %s: no such file or directory", filename)
+		return nil,err
+	}
+
+	return fil,nil
 }
+
+func (f *File)Close(){
+	//sync mutex
+//	f.file.Close()
+}
+
 

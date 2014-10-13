@@ -1,7 +1,6 @@
 package packets
 import (
 	"encoding/binary"
-	"fmt"
 )
 const ErrorOpcode uint16 = 5
 
@@ -32,6 +31,5 @@ func CreateErrorPacket(code ErrorCode, message string) []byte {
 	
 	copy(buf[4:], []byte(message)) // correct
 	buf[len(buf)-1] = byte(0)
-	fmt.Println(buf)
 	return buf
 }

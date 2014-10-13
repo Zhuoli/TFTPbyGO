@@ -18,7 +18,7 @@ func NewRequestHandler() *RequestHandler {
 
 func (a *RequestHandler) Listen(serverConn *common.Common) error {
 	packet := make([]byte, packets.MaxPacketSize)
-	n, remoteAddr, err := serverConn.Conn.ReadFrom(packet)
+	n, remoteAddr, err := serverConn.ReadFrom(packet)
 	req,err :=serverConn.ErrorCheck(err,n,remoteAddr,packet)
 	if err!=nil{
 		return err

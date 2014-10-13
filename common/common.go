@@ -5,7 +5,6 @@ import (
 	"encoding/binary"
 	"fmt"
 	"net"
-//	"strings"
 	
 	"packets"
 	
@@ -71,7 +70,7 @@ func GetOpCode(packet []byte) (packets.OpCode, error) {
 }
 
 func(com *Common) SendError(code packets.ErrorCode, message string,remoteAddress net.Addr) error {
-	conn:=com.Conn
+	conn:=com.conn
 	errPacket := packets.CreateErrorPacket(0, message)
 	_, err := conn.WriteTo(errPacket, remoteAddress)
 	if err != nil {

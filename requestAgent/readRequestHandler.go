@@ -9,7 +9,6 @@ import (
 	
 	"fileSys"
 	"common"	
-	"timeoutcontroller"
 )
 
 func (a *RequestHandler) HandleReadRequest(remoteAddress net.Addr, filename string) {
@@ -21,7 +20,7 @@ func (a *RequestHandler) HandleReadRequest(remoteAddress net.Addr, filename stri
 	}
 	defer com.Close()
 
-	br,f,err :=a.fs.ReadFileByName(filename)
+	br,f,err :=a.fs.GetReader(filename)
 	if err!=nil{
 		com.SendError(packets.FileNotFound, "File not found", remoteAddress)	
 		return
@@ -59,14 +58,14 @@ func ReadFileLoop(r *fileSys.Reader, com *common.Common, remoteAddr net.Addr, bl
 		bytesRead += n
 
 		packet := packets.CreateDataPacket(tid, buffer[:n])
-		n, err = com.Conn.WriteTo(packet, remoteAddr)
+		n, err = com.WriteTo(packet, remoteAddr)
 		if err != nil {
 			return bytesRead, fmt.Errorf("Error writing data packet: %v", err)
 		}
 
 		// Read ack
-		com.Conn.SetReadDeadline(time.Now().Add(timeoutcontroller.Timeout * time.Second))
-		i, _, err := com.Conn.ReadFrom(ackBuf)
+		//com.Conn.SetReadDeadline(time.Now().Add(timeoutcontroller.Timeout * time.Second))
+		i, _, err := com.ReadFrom(ackBuf)
 		if err != nil {
 			return bytesRead, fmt.Errorf("Error reading ACK packet: %v", err)
 		}

@@ -2,17 +2,17 @@ package fileSys
 
 import (
 	"bytes"
-	"chanmutex"
+//	"fmt"
 )
 type Writer struct{
 	buffer *bytes.Buffer
-	filename string
+	f		File
 }
 
 func NewWriter(F *File) *Writer{
 	return &Writer{
 		buffer : bytes.NewBuffer(F.buffer),
-		filename : F.filename,
+		f : *F,
 	}
 }
 
@@ -20,12 +20,14 @@ func(w *Writer)Write(chunk []byte)(int,error){
 	n,err:=w.buffer.Write(chunk)
 	return n,err
 }
-
+// unlock this file once wrote done
 func(w *Writer)Flush(){
 	fs :=GetFileSys()
-	fs.Register(w.filename,File{
-			ChanLock : chanmutex.NewChanLock(),
-			filename : w.filename,
-			buffer	 : w.buffer.Bytes(),
-			})
+	fs.Lock()
+	defer fs.Unlock()
+	fs.FileMap[w.f.filename]=&File{
+		filename : w.f.filename,
+		buffer	:  w.buffer.Bytes(),
+	}
+	
 }

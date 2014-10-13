@@ -4,12 +4,12 @@ import (
 	"common"
 	"net"
 	"log"
-	"time"
+//	"time"
 	"fmt"
 	"encoding/binary"
 	
 	"packets"
-	"timeoutcontroller"
+//	"timeoutcontroller"
 	"fileSys"
 )
 
@@ -28,7 +28,6 @@ func (a *RequestHandler)HandleWriteRequest(remoteAddress net.Addr, filename stri
 		com.SendError(0, err.Error(), remoteAddress)
 		return
 	}
-	defer fileSys.FileCleanup(f)
 
 	bw := fileSys.NewWriter(f)
 	defer bw.Flush()
@@ -47,7 +46,7 @@ func WriteFileLoop(w *fileSys.Writer, com *common.Common, remoteAddress net.Addr
 
 	// Acknowledge WRQ
 	ack := packets.CreateAckPacket(tid)
-	_, err := com.Conn.WriteTo(ack, remoteAddress)
+	_, err := com.WriteTo(ack, remoteAddress)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -68,7 +67,7 @@ func WriteFileLoop(w *fileSys.Writer, com *common.Common, remoteAddress net.Addr
 }
 func WriteFile(w *fileSys.Writer, com *common.Common, remoteAddress net.Addr, packet []byte, tid uint16) (int, net.Addr, error) {
 	// Read data packet
-	n, replyAddr, err := com.Conn.ReadFrom(packet)
+	n, replyAddr, err := com.ReadFrom(packet)
 	if err != nil {
 		return n, replyAddr, fmt.Errorf("Error reading packet: %v", err)
 	}
@@ -98,8 +97,8 @@ func WriteFile(w *fileSys.Writer, com *common.Common, remoteAddress net.Addr, pa
 	}
 
 	ack := packets.CreateAckPacket(tid)
-	com.Conn.SetWriteDeadline(time.Now().Add(timeoutcontroller.Timeout * time.Second))
-	_, err = com.Conn.WriteTo(ack, replyAddr)
+	//com.Conn.SetWriteDeadline(time.Now().Add(timeoutcontroller.Timeout * time.Second))
+	_, err = com.WriteTo(ack, replyAddr)
 	if err != nil {
 		return n, replyAddr, fmt.Errorf("Error writing ACK packet: %v", err)
 	}

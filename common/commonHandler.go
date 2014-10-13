@@ -6,14 +6,16 @@ import (
 	"log"
 	"fmt"
 	"packets"
+	"timeoutcontroller"
 
 )
 
 type Common struct{
-	Conn *net.UDPConn 
+	conn *net.UDPConn 
+	timeout	timeoutcontroller.Duration
 }
 func(com *Common) Close(){
-	com.Conn.Close()
+	com.conn.Close()
 }
 
 // get the UDPConn instance
@@ -30,7 +32,8 @@ func NewServerConnection(host string,port int) *Common{
 
 	log.Printf("Listening on %v\n", udpConn.LocalAddr())
 	return &Common{
-		Conn:udpConn,
+		conn:udpConn,
+		timeout : timeoutcontroller.NewDuration(0),
 	}
 }
 
@@ -44,7 +47,7 @@ func NewUDPConnection() (*Common,error){
 		return nil,nil
 	}
 	return &Common{
-		Conn : conn,
+		conn : conn,
 		},err
 }
 
