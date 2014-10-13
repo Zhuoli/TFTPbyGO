@@ -12,7 +12,7 @@ import (
 
 type Common struct{
 	conn *net.UDPConn 
-	timeout	timeoutcontroller.Duration
+	duration	timeoutcontroller.Duration
 }
 func(com *Common) Close(){
 	com.conn.Close()
@@ -33,7 +33,7 @@ func NewServerConnection(host string,port int) *Common{
 	log.Printf("Listening on %v\n", udpConn.LocalAddr())
 	return &Common{
 		conn:udpConn,
-		timeout : timeoutcontroller.NewDuration(0),
+		duration : timeoutcontroller.Second(0),
 	}
 }
 
@@ -48,7 +48,7 @@ func NewUDPConnection() (*Common,error){
 	}
 	return &Common{
 		conn : conn,
-		timeout	: timeoutcontroller.NewDuration(1),
+		duration	: timeoutcontroller.Second(1),
 		},err
 }
 

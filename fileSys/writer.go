@@ -2,7 +2,6 @@ package fileSys
 
 import (
 	"bytes"
-//	"fmt"
 )
 type Writer struct{
 	buffer *bytes.Buffer

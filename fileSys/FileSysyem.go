@@ -37,44 +37,8 @@ func (fs *FileSys) GetReader(filename string) (*Reader,*File,error){
 }
 
 
-// return FileMap with a initial file in it, named: server.dat, seattle.jpg, out.txt
 func initFileMap() map[string] *File{
 	fileMap:=make(map[string] *File)
-//	val:=[]byte("hello, this is server file")
-//	val = append(val,byte(0))
-//	fileMap["server.dat"]=&File{
-//		filename	: "server.dat",
-//		buffer		: val,
-//	}
-//	fileMap["seattle.jpg"]=read2File("seattle.jpg")
-//	fileMap["out.txt"]=read2File("out.txt")
 	return fileMap
 }
 
-//
-//func read2File(filename string) *File{
-//	
-//	file, err := os.Open(filename)
-//
-//    if err != nil {
-//        panic(err.Error())
-//    }
-//    defer file.Close()
-//
-//    stats, statsErr := file.Stat()
-//    if statsErr != nil {
-//        panic(err.Error())
-//    }
-//
-//    var size int64 = stats.Size()
-//    bytes := make([]byte, size)
-//
-//    bufr := bufio.NewReader(file)
-//    _,err = bufr.Read(bytes)
-//    
-//    
-//	return &File{
-//		filename : filename,
-//		buffer : bytes,
-//	}
-//}

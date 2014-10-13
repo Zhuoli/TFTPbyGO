@@ -17,17 +17,7 @@ const (
 	OpACK   OpCode = 4
 	OpERROR OpCode = 5
 )
-//var OpCodeNames = map[OpCode]string{
-//	OpRRQ:   "RRQ",
-//	OpWRQ:   "WRQ",
-//	OpDATA:  "DATA",
-//	OpACK:   "ACK",
-//	OpERROR: "ERROR",
-//}
-//
-//func (o OpCode) String() string {
-//	return OpCodeNames[o]
-//}
+
 // GetOpCode will attempt to parse the OpCode from the packet passed in
 func GetOpCode(packet []byte) (OpCode, error) {
 	if len(packet) < 2 {

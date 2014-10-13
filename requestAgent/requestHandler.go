@@ -25,13 +25,13 @@ func (a *RequestHandler) Listen(serverConn *common.Common) error {
 	}
 	switch req.OpCode{
 		case packets.OpRRQ:
-			a.getRequest(remoteAddr,req.Filename)
+			go a.getRequest(remoteAddr,req.Filename)
 		case packets.OpWRQ:
-			a.putRequest(remoteAddr,req.Filename)
+			go a.putRequest(remoteAddr,req.Filename)
 		case packets.OpERROR:
-		 	a.handleError(remoteAddr,req.Filename)
+		 	go a.handleError(remoteAddr,req.Filename)
 		default:
-			a.handleInvalidPacket(remoteAddr,req.Filename)
+			go a.handleInvalidPacket(remoteAddr,req.Filename)
 	}
 	return nil
 }

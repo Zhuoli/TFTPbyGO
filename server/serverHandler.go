@@ -21,7 +21,8 @@ func(s *Server)  Run(){
 		}
 	}
 }
-
+// this is used to interaction on server side
+// type "ls", server will list all the filename and it's size received
 func interaction(){
 	in :=bufio.NewReader(os.Stdin)
 	fs :=fileSys.GetFileSys()
@@ -33,7 +34,6 @@ func interaction(){
 		}
 		input=strings.Trim(input," ")
 		input=strings.Trim(input,"\n")
-		fmt.Println("cmd: ",input)
 		if input=="ls"{
 			fmt.Println("file names:")
 			for filename,file :=range fs.FileMap{

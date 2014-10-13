@@ -26,7 +26,7 @@ func (fs *FileSys)Open(filename string) (* File,error){
 
 	return fil,nil
 }
-
+// nothing to do
 func (f *File)Close(){
 	//sync mutex
 //	f.file.Close()

@@ -1,21 +1,24 @@
 package timeoutcontroller
 import(
-//	"time"
+	"time"
 )
 
-const Timeout =2
 
 type Duration struct{
-	second	int
+	millisecond	int
 }
 
-func NewDuration(sec int)Duration{
+func Second(sec int)Duration{
 	return Duration{
-		second	: sec,
+		millisecond	: sec*1000,
 	}
 }
 
 func (d *Duration) IsZero()bool{
-	return d.second==0
+	return d.millisecond==0
+}
+
+func (d *Duration) GetDuration() time.Duration{
+	return time.Duration(d.millisecond)*time.Millisecond
 }
 
