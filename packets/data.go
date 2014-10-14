@@ -6,18 +6,6 @@ import	(
 
 const DataOpcode uint16 = 3
 
-//type Data struct {
-//	BlockNumber uint16
-//	Data        []byte
-//}
-//func (data Data) Byte()[]byte{
-//	buf :=&bytes.Buffer{}
-//	binary.Write(buf,binary.BigEndian,DataOpcode)
-//	binary.Write(buf,binary.BigEndian,data.BlockNumber)
-//	buf.Write(data.Data)
-//	return buf.Bytes()
-//}
-
 //  2 bytes     2 bytes      n bytes
 //  ----------------------------------
 // | Opcode |   Block #  |   Data     |

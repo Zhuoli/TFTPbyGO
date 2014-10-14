@@ -30,7 +30,7 @@ func GetOpCode(packet []byte) (OpCode, error) {
 	return opcode, nil
 }
 
-func AcceptedMode(mode string) bool {
+func IsAcceptedMode(mode string) bool {
 	switch strings.ToLower(mode) {
 	case "netascii", "octet", "mail":
 		return true

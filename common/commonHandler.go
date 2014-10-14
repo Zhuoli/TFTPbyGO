@@ -67,7 +67,7 @@ func (serverConn *Common) ErrorCheck(err error, n int, remoteAddr net.Addr,packe
 	if err != nil {
 		return req, fmt.Errorf("Error parsing request packet: %v", err)
 	}
-	if !packets.AcceptedMode(req.Mode) {
+	if !packets.IsAcceptedMode(req.Mode) {
 		return req,fmt.Errorf("Unknown mode: %s", req.Mode)
 	}	
 	return req,nil

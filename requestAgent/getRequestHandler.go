@@ -26,7 +26,7 @@ func (a *RequestHandler) HandleGetRequest(remoteAddress net.Addr, filename strin
 		return
 	}
 	defer f.Close()
-	bytesRead, err := ReadFileLoop(br, com, remoteAddress, packets.BlockSize)
+	bytesRead, err := readFileLoop(br, com, remoteAddress, packets.BlockSize)
 	
 	
 	if err != nil {
@@ -38,7 +38,7 @@ func (a *RequestHandler) HandleGetRequest(remoteAddress net.Addr, filename strin
 // ReadFileLoop will read from r in blockSize chunks, sending each chunk to through conn
 // to remoteAddr. After each send it will wait for an ACK packet. It will loop until
 // EOF on r.
-func ReadFileLoop(r *fileSys.Reader, com *common.Common, remoteAddr net.Addr, blockSize int) (int, error) {
+func readFileLoop(r *fileSys.Reader, com *common.Common, remoteAddr net.Addr, blockSize int) (int, error) {
 	var tid uint16
 	var bytesRead int
 	tid=0

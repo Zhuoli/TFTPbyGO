@@ -24,7 +24,6 @@ func ParseAckPacket(packet []byte) (tid uint16, err error) {
 }
 
 
-// writes an ack packet to the supplied byte slice
 //
 //  2 bytes     2 bytes
 //  ---------------------

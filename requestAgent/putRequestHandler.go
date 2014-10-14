@@ -32,7 +32,7 @@ func (a *RequestHandler)HandlePutRequest(remoteAddress net.Addr, filename string
 	bw := fileSys.NewWriter(f)
 
 	
-	err = WriteFileLoop(bw, com, remoteAddress)
+	err = writeFileLoop(bw, com, remoteAddress)
 	if err != nil {
 		log.Println("Error receiving file:", err)
 		return
@@ -50,7 +50,7 @@ func cleanIfNotFlushed(filename string, fs fileSys.FileSys){
 	}
 }
 
-func WriteFileLoop(w *fileSys.Writer, com *common.Common, remoteAddress net.Addr) error{
+func writeFileLoop(w *fileSys.Writer, com *common.Common, remoteAddress net.Addr) error{
 	tid := uint16(0)
 
 	// Acknowledge WRQ
@@ -64,7 +64,7 @@ func WriteFileLoop(w *fileSys.Writer, com *common.Common, remoteAddress net.Addr
 	packet := make([]byte, packets.MaxPacketSize)
 	for {
 		tid++
-		n, _, err := WriteFile(w, com, remoteAddress, packet, tid)
+		n, _, err := writeFile(w, com, remoteAddress, packet, tid)
 		if err != nil {
 			return err
 		}
@@ -74,7 +74,7 @@ func WriteFileLoop(w *fileSys.Writer, com *common.Common, remoteAddress net.Addr
 		}
 	}
 }
-func WriteFile(w *fileSys.Writer, com *common.Common, remoteAddress net.Addr, packet []byte, tid uint16) (int, net.Addr, error) {
+func writeFile(w *fileSys.Writer, com *common.Common, remoteAddress net.Addr, packet []byte, tid uint16) (int, net.Addr, error) {
 	// Read data packet
 	n, replyAddr, err := com.ReadFrom(packet)
 	if err != nil {

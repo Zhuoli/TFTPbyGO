@@ -8,9 +8,6 @@ type Reader struct{
 }
 
 func NewReader(F *File) *Reader{
-//	fmt.Println(F.filename)
-//	fmt.Println("File size:")
-//	fmt.Println(len(F.buffer))
 	return &Reader{
 		buffer : bytes.NewBuffer(F.buffer),
 	}
