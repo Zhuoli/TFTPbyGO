@@ -10,7 +10,7 @@ import (
 	
 	"fileSys"
 )
-// while loop, start listen on UDP port
+// while loop, start to listen on UDP port
 func(s *Server)  Run(){
 	go interaction()
 	for {
@@ -21,7 +21,7 @@ func(s *Server)  Run(){
 		}
 	}
 }
-// this is used to interaction on server side
+// this is used for interaction on server side
 // type "ls", server will list all the filename and it's size received
 func interaction(){
 	in :=bufio.NewReader(os.Stdin)
